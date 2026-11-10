@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartera Pendiente · Gallyas &amp; Enlaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy: #0E1A2B;
+  --navy-2: #16263D;
+  --paper: #F3F5F7;
+  --card: #FFFFFF;
+  --line: #E2E6EA;
+  --ink: #101826;
+  --ink-soft: #5B6675;
+  --teal: #0E8A7D;
+  --teal-soft: #E4F3F1;
+
+  --b-vigente: #0E8A7D;
+  --b-1-14:  #12A594;
+  --b-15-29: #E8A93B;
+  --b-30-44: #E8823B;
+  --b-45-59: #E3603A;
+  --b-60-70: #D6402F;
+  --b-mas70: #7A1F2B;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--teal); color:#fff;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.disp{font-family:'Space Grotesk',sans-serif;}
+
+/* ---------- HEADER ---------- */
+header.top{
+  background:linear-gradient(160deg,var(--navy) 0%, var(--navy-2) 100%);
+  color:#fff;
+  padding:28px clamp(16px,4vw,48px) 34px;
+  position:relative;
+  overflow:hidden;
+}
+header.top::after{
+  content:"";
+  position:absolute; right:-80px; top:-80px; width:320px; height:320px;
+  background:radial-gradient(circle, rgba(18,165,148,.25), transparent 70%);
+  pointer-events:none;
+}
+.eyebrow{
+  text-transform:uppercase; letter-spacing:.16em; font-size:11px; font-weight:600;
+  color:#8FA6BE; margin-bottom:8px;
+}
+.title-row{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;}
+h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(26px,3.4vw,38px);
+  margin:0; font-weight:700; letter-spacing:-.01em;
+}
+.asof{color:#B7C6D6; font-size:13px; margin-top:6px;}
+.asof b{color:#fff;}
+
+/* company chips in header */
+.company-tags{display:flex; gap:8px; margin-top:14px;}
+.company-tag{
+  font-size:11px; font-weight:600; letter-spacing:.04em; padding:5px 10px; border-radius:20px;
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); color:#D7E3EE;
+}
+
+/* ---------- KPI ROW ---------- */
+.kpi-wrap{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:14px;
+  padding:0 clamp(16px,4vw,48px); margin-top:-30px; position:relative; z-index:2;
+}
+.kpi{
+  background:var(--card); border:1px solid var(--line); border-radius:14px;
+  padding:18px 18px 16px; box-shadow:0 1px 2px rgba(16,24,38,.04);
+}
+.kpi-label{font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); font-weight:600;}
+.kpi-value{font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; margin-top:8px; letter-spacing:-.01em;}
+.kpi-sub{font-size:12px; color:var(--ink-soft); margin-top:4px;}
+.kpi.accent-bad .kpi-value{color:#B23A2D;}
+.kpi.accent-good .kpi-value{color:#0E8A7D;}
+
+/* ---------- MAIN LAYOUT ---------- */
+main{padding:26px clamp(16px,4vw,48px) 60px; width:100%;}
+
+.section-title{
+  font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:600;
+  margin:0 0 12px; display:flex; align-items:center; gap:8px; color:var(--ink);
+}
+.section-title .n{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft);
+  background:var(--paper); border:1px solid var(--line); padding:2px 7px; border-radius:6px;
+}
+
+/* Aging thermometer */
+.thermo-card{
+  background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px 18px; margin-bottom:20px;
+}
+.thermo-bar{
+  display:flex; width:100%; height:38px; border-radius:8px; overflow:hidden; cursor:pointer;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);
+}
+.thermo-seg{
+  height:100%; display:flex; align-items:center; justify-content:center; color:#fff;
+  font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600;
+  transition:filter .15s, transform .15s; position:relative; min-width:2px;
+}
+.thermo-seg:hover{filter:brightness(1.08); transform:scaleY(1.05);}
+.thermo-seg.active{outline:2px solid var(--ink); outline-offset:-2px;}
+.thermo-legend{display:flex; flex-wrap:wrap; gap:14px 22px; margin-top:14px;}
+.leg-item{display:flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; user-select:none;}
+.leg-item.disabled{opacity:.35;}
+.leg-dot{width:10px; height:10px; border-radius:3px; flex:none;}
+.leg-amt{font-family:'IBM Plex Mono',monospace; color:var(--ink); font-weight:600;}
+
+/* Filters */
+.filters-card{
+  background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 20px;
+  display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; margin-bottom:16px;
+}
+.f-group{display:flex; flex-direction:column; gap:5px;}
+.f-group label{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); font-weight:600;}
+.f-select-btn{
+  border:1px solid var(--line); background:#fff; border-radius:9px; padding:8px 12px; font-size:13px;
+  color:var(--ink); cursor:pointer; min-width:150px; text-align:left; position:relative; font-family:'Inter',sans-serif;
+}
+.f-select-btn:after{content:"▾"; float:right; color:var(--ink-soft); margin-left:8px;}
+.f-panel{
+  display:none; position:absolute; background:#fff; border:1px solid var(--line); border-radius:10px;
+  box-shadow:0 10px 30px rgba(16,24,38,.14); padding:8px; margin-top:4px; z-index:50; max-height:260px; overflow:auto; min-width:200px;
+}
+.f-panel.open{display:block;}
+.f-opt{display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; font-size:13px; cursor:pointer;}
+.f-opt:hover{background:var(--paper);}
+.f-search{
+  flex:1; min-width:220px;
+}
+.f-search input{
+  width:100%; padding:9px 12px; border:1px solid var(--line); border-radius:9px; font-size:13px; font-family:'Inter',sans-serif;
+}
+.f-clear{
+  border:none; background:transparent; color:var(--teal); font-size:12.5px; font-weight:600; cursor:pointer; padding:9px 4px;
+}
+.f-export{
+  margin-left:auto; background:var(--navy); color:#fff; border:none; border-radius:9px; padding:9px 16px;
+  font-size:12.5px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif;
+}
+.f-export:hover{background:var(--navy-2);}
+
+/* Table */
+.table-card{background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden;}
+.table-scroll{overflow:auto; max-height:640px;}
+table{width:100%; border-collapse:collapse; font-size:12.8px; min-width:2060px;}
+thead th{
+  text-align:left; padding:11px 12px; background:var(--paper); color:var(--ink-soft);
+  font-weight:600; font-size:10.8px; text-transform:uppercase; letter-spacing:.05em;
+  border-bottom:1px solid var(--line); white-space:nowrap; cursor:pointer; position:sticky; top:0; z-index:2;
+}
+thead th:hover{color:var(--ink);}
+thead th .arrow{font-size:9px; margin-left:3px; opacity:.5;}
+tbody td{padding:10px 12px; border-bottom:1px solid #EEF0F2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+tbody tr:hover{background:#FAFBFC;}
+td.num, th.num{text-align:right; font-family:'IBM Plex Mono',monospace;}
+.bucket-cell{display:flex; align-items:center; gap:7px;}
+.bucket-dot{width:9px; height:9px; border-radius:3px; flex:none;}
+.cliente-name{font-weight:600;}
+.co-tag{
+  font-size:10px; font-weight:700; padding:2px 6px; border-radius:5px; letter-spacing:.03em;
+}
+.co-tag.gallyas{background:#EAF2FB; color:#1E5FA8;}
+.co-tag.enlaces{background:#F1E9FB; color:#6B32A8;}
+
+/* Frozen columns: Empresa, Cliente, RUT, Documento, N°, Vencimiento */
+table th:nth-child(1), table td:nth-child(1){ width:92px; min-width:92px; max-width:92px; }
+table th:nth-child(2), table td:nth-child(2){ width:230px; min-width:230px; max-width:230px; }
+table th:nth-child(3), table td:nth-child(3){ width:135px; min-width:135px; max-width:135px; }
+table th:nth-child(4), table td:nth-child(4){ width:170px; min-width:170px; max-width:170px; }
+table th:nth-child(5), table td:nth-child(5){ width:90px; min-width:90px; max-width:90px; }
+table th:nth-child(6), table td:nth-child(6){ width:125px; min-width:125px; max-width:125px; }
+
+table th:nth-child(-n+6), table td:nth-child(-n+6){ position:sticky; overflow:hidden; text-overflow:ellipsis; }
+table th:nth-child(1), table td:nth-child(1){ left:0; }
+table th:nth-child(2), table td:nth-child(2){ left:92px; }
+table th:nth-child(3), table td:nth-child(3){ left:322px; }
+table th:nth-child(4), table td:nth-child(4){ left:457px; }
+table th:nth-child(5), table td:nth-child(5){ left:627px; }
+table th:nth-child(6), table td:nth-child(6){ left:717px; box-shadow:4px 0 6px -4px rgba(16,24,38,.18); }
+
+thead th:nth-child(-n+6){ z-index:3; background:var(--paper); }
+tbody td:nth-child(-n+6){ background:#fff; z-index:1; }
+tbody tr:hover td:nth-child(-n+6){ background:#FAFBFC; }
+
+.table-footer{display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-soft);}
+
+.empty-state{padding:60px 20px; text-align:center; color:var(--ink-soft);}
+.empty-state b{display:block; color:var(--ink); font-size:15px; margin-bottom:6px; font-family:'Space Grotesk',sans-serif;}
+
+/* Cuenta x Tramo summary table */
+table.summary-table{min-width:auto !important;}
+table.summary-table th, table.summary-table td{
+  position:static !important; width:auto !important; min-width:auto !important;
+  max-width:none !important; box-shadow:none !important; left:auto !important;
+}
+table.summary-table thead th{ position:sticky; top:0; }
+table.summary-table tfoot td{
+  padding:10px 12px; font-size:12.8px; border-top:2px solid var(--line);
+  border-bottom:none; background:var(--paper);
+}
+table.summary-table td.cuenta-name{ font-weight:600; white-space:normal; }
+
+footer.note{text-align:center; color:var(--ink-soft); font-size:11.5px; padding:20px; }
+
+@media (max-width: 980px){
+  .kpi-wrap{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="eyebrow">Cuentas por cobrar &middot; Aging report</div>
+  <div class="title-row">
+    <div>
+      <h1>Cartera de Facturas Pendientes</h1>
+      <div class="asof">Corte al <b id="asOfLabel">—</b> &middot; <span id="totalCountLabel">—</span> documentos</div>
+      <div class="company-tags">
+        <span class="company-tag">GALLYAS</span>
+        <span class="company-tag">ENLACES</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="kpi-wrap" id="kpiWrap"></div>
+
+<main>
+
+  <div class="thermo-card">
+    <div class="section-title">Termómetro de mora <span class="n">saldo total por tramo</span></div>
+    <div class="thermo-bar" id="thermoBar"></div>
+    <div class="thermo-legend" id="thermoLegend"></div>
+  </div>
+
+
+  <div class="filters-card" id="filtersCard">
+    <div class="f-group">
+      <label>Empresa</label>
+      <button class="f-select-btn" id="btnEmpresa" data-key="empresa">Todas</button>
+    </div>
+    <div class="f-group">
+      <label>Local</label>
+      <button class="f-select-btn" id="btnLocal" data-key="local">Todos</button>
+    </div>
+    <div class="f-group">
+      <label>Vendedor</label>
+      <button class="f-select-btn" id="btnVendedor" data-key="vendedor">Todos</button>
+    </div>
+    <div class="f-group">
+      <label>C. Costo</label>
+      <button class="f-select-btn" id="btnCcosto" data-key="ccosto">Todos</button>
+    </div>
+    <div class="f-group">
+      <label>Cuenta</label>
+      <button class="f-select-btn" id="btnCuenta" data-key="cuenta">Todas</button>
+    </div>
+    <div class="f-group">
+      <label>Tramo</label>
+      <button class="f-select-btn" id="btnTramo" data-key="tramoKey">Todos</button>
+    </div>
+    <div class="f-group f-search">
+      <label>Buscar cliente / RUT / N&deg; documento</label>
+      <input type="text" id="searchInput" placeholder="Ej: KOMATSU, 53336165-K, 062204...">
+    </div>
+    <button class="f-clear" id="clearFilters">Limpiar filtros</button>
+    <button class="f-export" id="exportCsv">Exportar CSV ↓</button>
+  </div>
+
+  <div class="section-title" style="margin-bottom:8px;">Detalle de documentos <span class="n" id="rowCountLabel"></span></div>
+  <div class="table-card">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th data-col="empresa">Empresa <span class="arrow"></span></th>
+            <th data-col="cliente">Cliente <span class="arrow"></span></th>
+            <th data-col="rut">RUT <span class="arrow"></span></th>
+            <th data-col="documento">Documento <span class="arrow"></span></th>
+            <th data-col="numero">N&deg; <span class="arrow"></span></th>
+            <th data-col="fechaVcto">Vencimiento <span class="arrow"></span></th>
+            <th data-col="vendedor">Vendedor <span class="arrow"></span></th>
+            <th data-col="ccosto">C.Costo <span class="arrow"></span></th>
+            <th data-col="cuenta">Cuenta <span class="arrow"></span></th>
+            <th data-col="diasMora" class="num">D&iacute;as mora <span class="arrow"></span></th>
+            <th data-col="vigente" class="num">Vigente <span class="arrow"></span></th>
+            <th data-col="b1_14" class="num">1-14 <span class="arrow"></span></th>
+            <th data-col="b15_29" class="num">15-29 <span class="arrow"></span></th>
+            <th data-col="b30_44" class="num">30-44 <span class="arrow"></span></th>
+            <th data-col="b45_59" class="num">45-59 <span class="arrow"></span></th>
+            <th data-col="b60_70" class="num">60-70 <span class="arrow"></span></th>
+            <th data-col="mas70" class="num">&gt;70 <span class="arrow"></span></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="table-footer" id="tableFooter"></div>
+  </div>
+
+  <div class="section-title" style="margin:26px 0 8px;">Resumen de cuentas por tramo <span class="n" id="cuentaSummaryCount"></span></div>
+  <div class="table-card">
+    <div class="table-scroll" style="max-height:none;">
+      <table class="summary-table" id="cuentaSummaryTable"></table>
+    </div>
+  </div>
+
+  <footer class="note">Datos cargados desde datosnvo.json &middot; tramos de mora recalculados con la fecha de hoy &middot; Todos los montos en pesos chilenos (CLP)</footer>
+</main>
+
+<script>
+// Carga de datos externos: los datos ya no están embebidos en el HTML.
+// Para actualizar el dashboard cada día, basta con reemplazar el archivo
+// "datosnvo.json" (mismo formato, mismo nombre, misma carpeta que este HTML)
+// por la exportación del día. Cada registro es un objeto con las llaves:
+// empresa, rut, cliente, documento, numero, fechavcto, local, codigo,
+// vendedor, ccosto, cuenta, saldo.
+// El tramo de mora de cada documento se recalcula automáticamente al abrir
+// la página, comparando "fechavcto" con la fecha de hoy — no hace falta
+// tocar el HTML ni el JS para que los totales por tramo queden al día.
+let RAW_DATA = [];
+async function cargarDatos(){
+  try{
+    const resp = await fetch('datosnvo.json?t=' + Date.now());
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    RAW_DATA = await resp.json();
+    // Limpieza básica: recorta espacios/tabs sobrantes en campos de texto
+    RAW_DATA.forEach(r => {
+      Object.keys(r).forEach(k => { if(typeof r[k] === 'string') r[k] = r[k].trim(); });
+    });
+  }catch(err){
+    console.error('No se pudo cargar datosnvo.json', err);
+    document.body.innerHTML = '<div style="padding:48px;font-family:sans-serif;color:#B23A2D;">'
+      + '<h2>No se pudieron cargar los datos</h2>'
+      + '<p>Verifica que el archivo <code>datosnvo.json</code> esté en la misma carpeta que este HTML '
+      + 'y que estés viendo la página a través de un servidor (no con doble clic / <code>file://</code>).</p>'
+      + '<p style="color:#5B6675;font-size:13px;">Detalle técnico: ' + (err && err.message ? err.message : err) + '</p>'
+      + '</div>';
+    throw err;
+  }
+}
+</script>
+<script>
+(async function(){
+await cargarDatos();
+// Fecha de corte = fecha de hoy, para que los tramos de mora se recalculen
+// solos cada vez que se abre el archivo (no requiere editar el HTML).
+const ASOF = new Date();
+ASOF.setHours(0,0,0,0);
+const BUCKETS = [
+  {key:'vigente', label:'Vigente', color:'var(--b-vigente)', hex:'#0E8A7D'},
+  {key:'b1_14',   label:'1-14',    color:'var(--b-1-14)',   hex:'#12A594'},
+  {key:'b15_29',  label:'15-29',   color:'var(--b-15-29)',  hex:'#E8A93B'},
+  {key:'b30_44',  label:'30-44',   color:'var(--b-30-44)',  hex:'#E8823B'},
+  {key:'b45_59',  label:'45-59',   color:'var(--b-45-59)',  hex:'#E3603A'},
+  {key:'b60_70',  label:'60-70',   color:'var(--b-60-70)',  hex:'#D6402F'},
+  {key:'mas70',   label:'>70',     color:'var(--b-mas70)',  hex:'#7A1F2B'},
+];
+
+function fmtCLP(n){
+  return '$' + Math.round(n).toLocaleString('es-CL');
+}
+function fmtCLPShort(n){
+  if(Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(1).replace('.0','') + 'M';
+  if(Math.abs(n) >= 1e3) return '$' + Math.round(n/1e3) + 'K';
+  return '$' + Math.round(n);
+}
+function fmtDate(s){
+  if(!s) return '-';
+  const [y,m,d] = s.split('-');
+  return `${d}-${m}-${y}`;
+}
+function diasMora(fechavcto){
+  if(!fechavcto) return 0;
+  const v = new Date(fechavcto+'T00:00:00');
+  const diff = Math.round((ASOF - v)/(1000*60*60*24));
+  return diff;
+}
+// Tramo asignado según días de mora (ASOF - fecha de vencimiento).
+// Vigente agrupa documentos aún no vencidos (dm<=0); el resto sigue los
+// cortes solicitados: 1-14, 15-29, 30-44, 45-59, 60-70 y >70.
+function tramoOfDias(dm){
+  if(dm <= 0)   return BUCKETS[0];
+  if(dm <= 14)  return BUCKETS[1];
+  if(dm <= 29)  return BUCKETS[2];
+  if(dm <= 44)  return BUCKETS[3];
+  if(dm <= 59)  return BUCKETS[4];
+  if(dm <= 70)  return BUCKETS[5];
+  return BUCKETS[6];
+}
+
+// enrich data
+// Nota: "fechavcto" (fecha de vencimiento) es el único dato que define el
+// tramo de mora de cada documento; el total (saldo) se coloca íntegro en
+// el tramo que corresponda según cuántos días de diferencia hay entre esa
+// fecha y la fecha de hoy (ASOF).
+const DATA = RAW_DATA.map(r => {
+  const dm = diasMora(r.fechavcto);
+  const t = tramoOfDias(dm);
+  const bucketAmounts = {};
+  BUCKETS.forEach(b => { bucketAmounts[b.key] = (b.key === t.key) ? (r.saldo || 0) : 0; });
+  return Object.assign({}, r, bucketAmounts, {
+    fechaVcto: r.fechavcto,
+    diasMora: dm,
+    tramoKey: t.key,
+    tramoLabel: t.label,
+  });
+});
+
+// Actualiza el encabezado con la fecha de corte (hoy) y el total de documentos
+document.getElementById('asOfLabel').textContent =
+  `${String(ASOF.getDate()).padStart(2,'0')}-${String(ASOF.getMonth()+1).padStart(2,'0')}-${ASOF.getFullYear()}`;
+document.getElementById('totalCountLabel').textContent = DATA.length.toLocaleString('es-CL');
+
+// ---------------- STATE ----------------
+const state = {
+  filters: { empresa: new Set(), local: new Set(), vendedor: new Set(), ccosto: new Set(), cuenta: new Set(), tramoKey: new Set() },
+  activeBucket: null,
+  search: '',
+  sortCol: 'saldo',
+  sortDir: -1,
+};
+
+function uniqueVals(key){
+  const s = new Set();
+  DATA.forEach(r => { if(r[key] !== null && r[key] !== undefined && r[key] !== '') s.add(r[key]); });
+  return Array.from(s).sort((a,b)=> (''+a).localeCompare((''+b), 'es', {numeric:true}));
+}
+
+function applyFilters(){
+  return DATA.filter(r => {
+    for(const key of Object.keys(state.filters)){
+      const set = state.filters[key];
+      if(set.size > 0 && !set.has(r[key])) return false;
+    }
+    if(state.activeBucket && r.tramoKey !== state.activeBucket) return false;
+    if(state.search){
+      const q = state.search.toLowerCase();
+      const hay = (r.cliente+' '+r.rut+' '+r.numero).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+// ---------------- KPIs ----------------
+function renderKPIs(filtered){
+  const totalSaldo = filtered.reduce((a,r)=>a+r.saldo,0);
+  const vigente = filtered.reduce((a,r)=>a+r.vigente,0);
+  const vencido = totalSaldo - vigente;
+  const pctVencido = totalSaldo ? (vencido/totalSaldo*100) : 0;
+  const mas70 = filtered.reduce((a,r)=>a+r.mas70,0);
+  // top deudor
+  const byClient = {};
+  filtered.forEach(r => byClient[r.cliente] = (byClient[r.cliente]||0) + r.saldo);
+  let topClient = '-', topAmt = 0;
+  Object.entries(byClient).forEach(([c,v])=>{ if(v>topAmt){topAmt=v; topClient=c;} });
+
+  const kpis = [
+    {label:'Saldo total pendiente', value: fmtCLP(totalSaldo), sub: `${filtered.length.toLocaleString('es-CL')} documentos`, cls:''},
+    {label:'Vigente (no vencido)', value: fmtCLP(vigente), sub: totalSaldo? (vigente/totalSaldo*100).toFixed(1)+'% de la cartera' : '—', cls:'accent-good'},
+    {label:'Vencido total', value: fmtCLP(vencido), sub: pctVencido.toFixed(1)+'% de la cartera', cls:'accent-bad'},
+    {label:'Mora dura (&gt;70 d&iacute;as)', value: fmtCLP(mas70), sub: totalSaldo? (mas70/totalSaldo*100).toFixed(1)+'% del total' : '—', cls:'accent-bad'},
+    {label:'Mayor deudor', value: topClient.length>22 ? topClient.slice(0,22)+'…' : topClient, sub: fmtCLP(topAmt), cls:''},
+  ];
+  document.getElementById('kpiWrap').innerHTML = kpis.map(k => `
+    <div class="kpi ${k.cls}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value" style="${k.label==='Mayor deudor' ? 'font-size:15px; font-family:Inter,sans-serif;' : ''}">${k.value}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>
+  `).join('');
+}
+
+// ---------------- Thermometer ----------------
+function renderThermo(filtered){
+  const totals = {};
+  BUCKETS.forEach(b => totals[b.key] = filtered.reduce((a,r)=>a+r[b.key],0));
+  const grand = Object.values(totals).reduce((a,b)=>a+b,0) || 1;
+
+  document.getElementById('thermoBar').innerHTML = BUCKETS.map(b => {
+    const val = totals[b.key];
+    const pct = val/grand*100;
+    if(pct <= 0) return '';
+    const active = state.activeBucket === b.key ? 'active' : '';
+    return `<div class="thermo-seg ${active}" data-bucket="${b.key}" style="width:${pct}%; background:${b.hex};" title="${b.label}: ${fmtCLP(val)}">${pct>7 ? pct.toFixed(0)+'%':''}</div>`;
+  }).join('');
+
+  document.getElementById('thermoLegend').innerHTML = BUCKETS.map(b => {
+    const val = totals[b.key];
+    const disabled = state.activeBucket && state.activeBucket !== b.key ? 'disabled' : '';
+    return `<div class="leg-item ${disabled}" data-bucket="${b.key}">
+      <span class="leg-dot" style="background:${b.hex}"></span>
+      ${b.label}: <span class="leg-amt">${fmtCLP(val)}</span>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('.thermo-seg, .leg-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const b = el.getAttribute('data-bucket');
+      state.activeBucket = state.activeBucket === b ? null : b;
+      state.page = 1;
+      renderAll();
+    });
+  });
+}
+
+// ---------------- Filters UI ----------------
+const filterDefs = [
+  {btn:'btnEmpresa', key:'empresa'},
+  {btn:'btnLocal', key:'local'},
+  {btn:'btnVendedor', key:'vendedor'},
+  {btn:'btnCcosto', key:'ccosto'},
+  {btn:'btnCuenta', key:'cuenta'},
+  {btn:'btnTramo', key:'tramoKey'},
+];
+
+function buildFilterPanel(key, btn){
+  let panel = document.getElementById('panel-'+key);
+  if(panel) panel.remove();
+  panel = document.createElement('div');
+  panel.className = 'f-panel';
+  panel.id = 'panel-'+key;
+  const options = key === 'tramoKey'
+    ? BUCKETS.map(b => ({value:b.key, label:b.label}))
+    : uniqueVals(key).map(v => ({value:v, label:v}));
+  panel.innerHTML = options.map(o => {
+    const checked = state.filters[key].has(o.value) ? 'checked' : '';
+    return `<label class="f-opt"><input type="checkbox" value="${o.value}" ${checked}> ${o.label}</label>`;
+  }).join('');
+  btn.parentElement.style.position = 'relative';
+  btn.parentElement.appendChild(panel);
+  panel.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const raw = inp.value;
+      const val = key === 'tramoKey' ? raw : (isNaN(raw) ? raw : (raw === String(parseInt(raw)) ? parseInt(raw) : raw));
+      if(inp.checked) state.filters[key].add(val);
+      else state.filters[key].delete(val);
+      updateFilterBtnLabel(key, btn);
+      state.page = 1;
+      renderAll();
+    });
+  });
+  return panel;
+}
+
+function updateFilterBtnLabel(key, btn){
+  const set = state.filters[key];
+  const toLabel = (v) => key === 'tramoKey' ? ((BUCKETS.find(b=>b.key===v)||{}).label || v) : v;
+  const label = set.size === 0 ? defaultLabel(key) : (set.size === 1 ? toLabel(Array.from(set)[0]) : `${set.size} seleccionados`);
+  btn.childNodes[0].textContent = label;
+}
+function defaultLabel(key){
+  return {empresa:'Todas', local:'Todos', vendedor:'Todos', ccosto:'Todos', cuenta:'Todas', tramoKey:'Todos'}[key];
+}
+
+filterDefs.forEach(({btn,key}) => {
+  const btnEl = document.getElementById(btn);
+  btnEl.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.querySelectorAll('.f-panel').forEach(p => { if(p.id !== 'panel-'+key) p.classList.remove('open'); });
+    let panel = document.getElementById('panel-'+key);
+    if(!panel) panel = buildFilterPanel(key, btnEl);
+    panel.classList.toggle('open');
+  });
+});
+document.addEventListener('click', () => document.querySelectorAll('.f-panel').forEach(p=>p.classList.remove('open')));
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  state.search = e.target.value.trim();
+  state.page = 1;
+  renderAll();
+});
+
+document.getElementById('clearFilters').addEventListener('click', () => {
+  Object.keys(state.filters).forEach(k => state.filters[k].clear());
+  state.activeBucket = null;
+  state.search = '';
+  document.getElementById('searchInput').value = '';
+  filterDefs.forEach(({btn,key}) => updateFilterBtnLabel(key, document.getElementById(btn)));
+  document.querySelectorAll('.f-panel').forEach(p => p.remove());
+  state.page = 1;
+  renderAll();
+});
+
+document.getElementById('exportCsv').addEventListener('click', () => {
+  const filtered = applyFilters();
+  const cols = ['empresa','cliente','rut','documento','numero','fechaVcto','vendedor','ccosto','cuenta','diasMora','vigente','b1_14','b15_29','b30_44','b45_59','b60_70','mas70'];
+  const header = ['Empresa','Cliente','RUT','Documento','Numero','Vencimiento','Vendedor','CCosto','Cuenta','DiasMora','Vigente','1-14','15-29','30-44','45-59','60-70','>70'];
+  const rows = filtered.map(r => cols.map(c => `"${(''+r[c]).replace(/"/g,'""')}"`).join(','));
+  const csv = [header.join(','), ...rows].join('\n');
+  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'cartera_pendiente_filtrada.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// ---------------- Table ----------------
+document.querySelectorAll('thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.getAttribute('data-col');
+    if(state.sortCol === col) state.sortDir *= -1;
+    else { state.sortCol = col; state.sortDir = 1; }
+    renderAll();
+  });
+});
+
+function bucketHexOf(key){
+  const b = BUCKETS.find(x=>x.key===key);
+  return b ? b.hex : '#999';
+}
+
+function cellAmt(val){
+  return val !== 0 ? fmtCLP(val) : '<span style="color:#C7CCD2;">—</span>';
+}
+
+function renderTable(filtered){
+  document.getElementById('rowCountLabel').textContent = `${filtered.length.toLocaleString('es-CL')} de ${DATA.length.toLocaleString('es-CL')}`;
+
+  const sorted = [...filtered].sort((a,b) => {
+    let va = a[state.sortCol], vb = b[state.sortCol];
+    if(typeof va === 'string') { va = va.toLowerCase(); vb = (vb||'').toLowerCase(); }
+    if(va < vb) return -1*state.sortDir;
+    if(va > vb) return 1*state.sortDir;
+    return 0;
+  });
+
+  const tbody = document.getElementById('tbody');
+  if(sorted.length === 0){
+    tbody.innerHTML = `<tr><td colspan="17"><div class="empty-state"><b>Sin resultados</b>Ajusta los filtros o el término de búsqueda.</div></td></tr>`;
+  } else {
+    tbody.innerHTML = sorted.map(r => `
+      <tr>
+        <td><span class="co-tag ${r.empresa==='GALLYAS'?'gallyas':'enlaces'}">${r.empresa}</span></td>
+        <td class="cliente-name" style="box-shadow:inset 3px 0 0 ${bucketHexOf(r.tramoKey)};" title="${r.cliente}">${r.cliente}</td>
+        <td class="mono">${r.rut}</td>
+        <td>${r.documento}</td>
+        <td class="mono">${r.numero}</td>
+        <td class="mono">${fmtDate(r.fechaVcto)}</td>
+        <td>${r.vendedor}</td>
+        <td class="mono">${r.ccosto}</td>
+        <td>${r.cuenta || '—'}</td>
+        <td class="num mono">${r.diasMora > 0 ? r.diasMora : '—'}</td>
+        <td class="num mono">${cellAmt(r.vigente)}</td>
+        <td class="num mono">${cellAmt(r.b1_14)}</td>
+        <td class="num mono">${cellAmt(r.b15_29)}</td>
+        <td class="num mono">${cellAmt(r.b30_44)}</td>
+        <td class="num mono">${cellAmt(r.b45_59)}</td>
+        <td class="num mono">${cellAmt(r.b60_70)}</td>
+        <td class="num mono">${cellAmt(r.mas70)}</td>
+      </tr>
+    `).join('');
+  }
+
+  const footer = document.getElementById('tableFooter');
+  const totalSaldoFiltered = sorted.reduce((a,r)=>a+r.saldo,0);
+  footer.innerHTML = `
+    <div>${sorted.length.toLocaleString('es-CL')} documento${sorted.length===1?'':'s'} &middot; despl&aacute;zate para ver todos</div>
+    <div class="mono">Saldo mostrado: <b>${fmtCLP(totalSaldoFiltered)}</b></div>
+  `;
+}
+
+// ---------------- Cuenta x Tramo summary ----------------
+function renderCuentaSummary(filtered){
+  const map = {}; // cuenta -> {bucketKey: sum}
+  filtered.forEach(r => {
+    const c = r.cuenta || '—';
+    if(!map[c]){ map[c] = {}; BUCKETS.forEach(b => map[c][b.key] = 0); }
+    BUCKETS.forEach(b => { map[c][b.key] += r[b.key]; });
+  });
+
+  const cuentas = Object.keys(map).sort((a,b) => a.localeCompare(b, 'es', {numeric:true}));
+  document.getElementById('cuentaSummaryCount').textContent = `${cuentas.length.toLocaleString('es-CL')} cuenta${cuentas.length===1?'':'s'}`;
+
+  const colTotals = {};
+  BUCKETS.forEach(b => colTotals[b.key] = 0);
+  let grandTotal = 0;
+
+  const bodyRows = cuentas.map(cuenta => {
+    let rowTotal = 0;
+    const cells = BUCKETS.map(b => {
+      const v = map[cuenta][b.key];
+      colTotals[b.key] += v;
+      rowTotal += v;
+      return `<td class="num mono">${cellAmt(v)}</td>`;
+    }).join('');
+    grandTotal += rowTotal;
+    return `<tr><td class="cuenta-name">${cuenta}</td>${cells}<td class="num mono" style="font-weight:600;">${fmtCLP(rowTotal)}</td></tr>`;
+  }).join('');
+
+  const table = document.getElementById('cuentaSummaryTable');
+  if(cuentas.length === 0){
+    table.innerHTML = `<tbody><tr><td><div class="empty-state"><b>Sin resultados</b>Ajusta los filtros o el término de búsqueda.</div></td></tr></tbody>`;
+    return;
+  }
+
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Cuenta</th>
+        ${BUCKETS.map(b => `<th class="num">${b.label}</th>`).join('')}
+        <th class="num">Total</th>
+      </tr>
+    </thead>
+    <tbody>${bodyRows}</tbody>
+    <tfoot>
+      <tr>
+        <td>Total general</td>
+        ${BUCKETS.map(b => `<td class="num mono" style="font-weight:700;">${fmtCLP(colTotals[b.key])}</td>`).join('')}
+        <td class="num mono" style="font-weight:700;">${fmtCLP(grandTotal)}</td>
+      </tr>
+    </tfoot>
+  `;
+}
+
+// ---------------- Master render ----------------
+function renderAll(){
+  const filtered = applyFilters();
+  renderKPIs(filtered);
+  renderThermo(filtered);
+  renderTable(filtered);
+  renderCuentaSummary(filtered);
+}
+
+renderAll();
+})();
+</script>
+</body>
+</html>
